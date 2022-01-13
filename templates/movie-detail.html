@@ -1,0 +1,89 @@
+{% extends 'index.html' %}
+
+{% block main %}
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <img style="height:300px; width:100%; object-fit:cover" src=" {{ movie.image.url }} " class="rounded"
+        alt="A generic square placeholder image with rounded corners in a figure.">
+      <button type="button" class="btn btn-dark mt-2 w-100" onclick="addtocart();">
+        Add to Cart
+      </button>
+
+    </div>
+    <div class="col-sm">
+      <figcaption class="figure-caption text-center"> {{ movie.name }} </figcaption>
+      <figcaption class="figure-caption text-center">Category: {{ movie.category.name }} </figcaption>
+      <div class="text-center mt-3">
+        {% for star in stars %}
+        <span class="fa fa-star checked"></span>
+        {% endfor %}
+
+      </div>
+      <p class="text-center mt-4"> {{movie.description|title}} </p>
+
+    </div>
+    <div class="col-sm">
+      <h3 class="text-center"> Similar Movies </h3>
+      <div class="row">
+
+        {% for movie in similar_movies %}
+
+        <div class="col-xl-6 col-sm-12 col-xs-12 mt-4">
+          <a href="{% url 'movie_detail' movie.pk %}">
+            <img style="height:100px; width:100%; object-fit:cover" src="{{ movie.image.url }}" class="rounded card-img"
+              alt="A generic square placeholder image with rounded corners in a figure.">
+
+            <div class="card-img-overlay">
+              <h5 class="card-title mt-4 text-center"> {{movie.name}} </h5>
+            </div>
+          </a>
+        </div>
+
+        {% endfor %}
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function addtocart() {
+
+    var auth = "{{request.user.is_authenticated}}"
+    if (auth == 'False') {
+      alert("Please login to add items in cart")
+    } else {
+        var cart = sessionStorage.getItem("cart")
+        if (cart != null && cart.includes('{{movie.name}}')) {
+          alert("already in cart")
+        } else {
+          fetch("{% url 'check_availability' movie.name %}")
+          .then(response => {
+            if (response.ok) {
+              if (cart === null) {
+                console.log("empty")
+                cart = ['{{movie.name}}']
+                sessionStorage.setItem("cart", cart)
+              } else {
+                cart=cart.split(',')
+                cart.push('{{movie.name}}')
+                sessionStorage.setItem("cart", cart);
+              }
+            } else {
+              alert("This movie is not available")
+            }
+          })
+          .catch(error => alert("Something went wrong!"))
+        }
+
+      }
+  };
+</script>
+
+
+{% endblock main %}

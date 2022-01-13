@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block main %}
+
+
+    <div class="row">
+        {% for movie in movies %}
+            <div class="col-md-4 col-xs-12 col-sm-2 col-lg-4 d-flex" style="justify-content:center;">
+                <figure class="figure">
+                    <a href="{% url 'movie_detail' movie.pk %}"> 
+                        <img style="height:300px; width:100%; object-fit:cover" src="{{ movie.image.url }}" class="rounded"
+                            alt="A generic square placeholder image with rounded corners in a figure.">
+                        <figcaption class="figure-caption text-center">{{ movie.name }}</figcaption>
+                        <figcaption class="figure-caption text-center">Category: {{ movie.category.name }}</figcaption>
+                    </a>
+                </figure>
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock main %}

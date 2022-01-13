@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+
+{% block main %}
+
+
+
+
+
+    <form style="margin-left:20%; margin-right:20%" action="{% url 'register' %}" method="POST">
+        {% csrf_token %}
+        <h1 class="text-center mb-4"> Register  </h1>
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+                {{message}}
+            </div>
+        {% endif %}
+        <div class="mb-3">
+            <label for="Username" class="form-label">Username</label>
+            <input type="text" class="form-control input-color" id="Username" name="username" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Password1" class="form-label">Password</label>
+            <input type="password" class="form-control input-color" id="Password1" name="password1" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Password2" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control input-color" id="Password2" name="password2" required>
+        </div>
+
+        <div class="mb-3">
+            <p> Already have an account? <span> <a class="form-label" href="{% url 'login' %}">Login</a> </span> </p>
+        </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    
+
+{% endblock main %}
